@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tes Kepribadian Warna Fortekai Pen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #3C0A63 0%, #D80135 100%);
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    background-image:
+      radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-position: 0 0, 25px 25px;
+    background-size: 50px 50px;
+    z-index: 0;
+  }
+  #container {
+    background: rgba(30, 30, 47, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    width: 100%;
+    max-width: 600px;
+    padding: 30px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  h1 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #d5c0f0;
+  }
+  h2 {
+    margin: 20px 0 15px 0;
+    color: #cdb4db;
+  }
+  .question {
+    margin-bottom: 25px;
+  }
+  .question-text {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    color: #fff;
+  }
+  label {
+    display: block;
+    padding: 12px 15px;
+    background: #3b3b59;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    color: #fff;
+  }
+  label:hover {
+    background: #5a4e99;
+  }
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + label {
+    background: #7e70e0;
+    color: #fff;
+  }
+  #submitBtn {
+    background: #7e70e0;
+    color: #fff;
+    border: none;
+    padding: 15px 0;
+    width: 100%;
+    font-size: 1.1em;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+  #submitBtn:hover {
+    background: #947ee7;
+  }
+  #result {
+    margin-top: 25px;
+    background: rgba(42, 39, 81, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    display: none;
+  }
+  #result h2 {
+    color: #d8b5ff;
+  }
+  #result p {
+    font-size: 1em;
+    line-height: 1.4em;
+    color: #ddd;
+  }
+  #result .color-swatch {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    margin: 20px auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  #buyBtn, #rewardBtn {
+    display: block;
+    margin: 15px auto 0 auto;
+    background: #8a3ab9;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    padding: 12px 30px;
+    font-size: 1.05em;
+    border-radius: 24px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    width: fit-content;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  #buyBtn:hover, #rewardBtn:hover {
+    background: #af6ee0;
+  }
+  #rewardCodeContainer {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.15em;
+    color: #ffe066;
+    background: rgba(138,58,185,0.15);
+    padding: 10px 20px;
+    border-radius: 15px;
+    user-select: text;
+  }
+  #rewardLimitMsg {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #f08080;
+    text-align: center;
+  }
+  @media(max-width: 650px) {
+    #container {
+      padding: 25px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="container" role="main">
+    <h1>Tes Kepribadian Warna Fortekai Pen</h1>
+    <form id="quizForm" aria-label="Tes kepribadian berdasarkan warna Fortekai pen">
+      <!-- Questions inserted by JS -->
+    </form>
+    <button id="submitBtn" type="button">Lihat Hasil</button>
+    <section id="result" aria-live="polite" aria-atomic="true" tabindex="0">
+      <!-- Result content inserted here -->
+    </section>
+  </div>
+<script>
+  const colors = {
+    "kuro_black": {
+      name: "Kuro Black",
+      colorCode: "#1c1c1c",
+      personality: "Misterius dan penuh kedalaman, kamu cenderung serius dan punya intuisi yang kuat. Suka ketenangan dan berpikir mendalam, tampil elegan dan tegas.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Kuro Black dengan desain elegan dan tinta pekat yang cocok untuk kesan profesional dan berwibawa.",
+      marketplace: "https://tk.tokopedia.com/ZShGmqys2/"
+    },
+    "enchanted_pink": {
+      name: "Enchanted Pink",
+      colorCode: "#e75480",
+      personality: "Penuh energi positif, hangat, dan kreatif. Kamu ramah, penuh kasih, dan suka mengekspresikan diri dengan warna cerah dan gaya feminin.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Enchanted Pink, pilihan tepat untuk kamu yang suka warna ngejreng dan stylish.",
+      marketplace: "https://tk.tokopedia.com/ZShGmqvnr/"
+    },
+    "twilight_blue": {
+      name: "Twilight Blue",
+      colorCode: "#4169e1",
+      personality: "Tenang, bijaksana, dan dapat dipercaya. Kamu membawa kedamaian dan stabilitas serta pandangan rasional yang membantu dalam keputusan.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Twilight Blue, pas untuk kamu yang pengen tampil profesional dan tenang.",
+      marketplace: "https://tk.tokopedia.com/ZShGmmqcy/"
+    },
+    "onyx_yellow": {
+      name: "Onyx Yellow",
+      colorCode: "#f4d35e",
+      personality: "Ceria dan optimis, suka bawa semangat dan keceriaan ke lingkungan sekitar. Kreatif dan selalu berpikiran positif.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Onyx Yellow, bikin hari-harimu makin cerah dan semangat saat menulis.",
+      marketplace: "https://tk.tokopedia.com/ZShGm9EJT/"
+    },
+    "radiant_green": {
+      name: "Radiant Green",
+      colorCode: "#4caf50",
+      personality: "Segar, penuh harapan dan cinta alam. Kamu pribadi yang menyejukkan, peduli lingkungan, dan punya energi yang mendukung pertumbuhan.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Radiant Green, rekomen buat kamu yang suka inspirasi dan kesejukan alami.",
+      marketplace: "https://tk.tokopedia.com/ZShGm59Ne/"
+    },
+    "flash_red": {
+      name: "Flash Red",
+      colorCode: "#e53935",
+      personality: "Berani, penuh semangat dan energik. Kamu tipe motivator yang selalu siap beraksi dan nyalain semangat orang lain.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Flash Red, untuk kamu yang ingin tampil menonjol dan penuh gairah.",
+      marketplace: "https://tk.tokopedia.com/ZShGaKTu7/"
+    },
+    "ivory_brown": {
+      name: "Ivory Brown",
+      colorCode: "#a9746e",
+      personality: "Hangat, stabil dan bisa diandalkan. Suka kesederhanaan dan bikin nyaman sekitar, sosok sabar dan bertanggung jawab tinggi.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Ivory Brown, klasik dan elegan, pas buat yang suka yang praktis dan anggun.",
+      marketplace: "https://tk.tokopedia.com/ZShGmsrrM/"
+    },
+    "ash_grey": {
+      name: "Ash Grey",
+      colorCode: "#7e7e7e",
+      personality: "Netral, fleksibel, dan penuh pertimbangan. Terbuka terhadap berbagai sudut pandang dan bisa menyesuaikan diri biar hasil terbaik.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Ash Grey, warna netral yang cocok untuk segala suasana dan kebutuhan.",
+      marketplace: "https://tk.tokopedia.com/ZShGmGyHU/"
+    }
+  };
+
+  // Reward info and limit
+  const REWARD_CODE = "FORTXDISCOUNT25";
+  const REWARD_MAX_CLAIM = 3;
+  const REWARD_STORAGE_KEY = "fortekai_reward_claim_count";
+
+  const questions = [
+    {
+      question: "Kalau pilih pena, gaya mana yang paling kamu suka?",
+      answers: [
+        { text: "Elegan dan misterius", color: "kuro_black" },
+        { text: "Cerah dan feminin", color: "enchanted_pink" },
+        { text: "Tenang dan profesional", color: "twilight_blue" },
+        { text: "Cerah dan penuh semangat", color: "onyx_yellow" }
+      ]
+    },
+    {
+      question: "Gimana sifat kamu pas kerja?",
+      answers: [
+        { text: "Berani dan suka ambil risiko", color: "flash_red" },
+        { text: "Stabil dan bisa diandalkan", color: "ivory_brown" },
+        { text: "Fleksibel dan terbuka", color: "ash_grey" },
+        { text: "Penuh harapan dan cinta alam", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Apa yang bikin kamu semangat pas hari lagi susah?",
+      answers: [
+        { text: "Sendiri dan mikir dalam", color: "kuro_black" },
+        { text: "Hangatnya teman dan keluarga", color: "enchanted_pink" },
+        { text: "Rencanain cara yang matang", color: "twilight_blue" },
+        { text: "Cahaya dan keceriaan", color: "onyx_yellow" }
+      ]
+    },
+    {
+      question: "Gimana cara kamu hadapin tantangan baru?",
+      answers: [
+        { text: "Dengan berani dan langsung aksi", color: "flash_red" },
+        { text: "Tenang dan mikir dulu", color: "twilight_blue" },
+        { text: "Fleksibel dan siap berubah", color: "ash_grey" },
+        { text: "Cari inspirasi dari alam", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Warna apa yang paling cocok sama kamu?",
+      answers: [
+        { text: "Hitam yang misterius", color: "kuro_black" },
+        { text: "Merah berani", color: "flash_red" },
+        { text: "Hijau segar dan penuh harapan", color: "radiant_green" },
+        { text: "Pink ceria dan penuh kasih", color: "enchanted_pink" }
+      ]
+    },
+    {
+      question: "Pas harus ambil keputusan susah, biasanya kamu...",
+      answers: [
+        { text: "Percaya insting sendiri", color: "kuro_black" },
+        { text: "Minta pendapat orang lain", color: "enchanted_pink" },
+        { text: "Pikir pakai logika", color: "twilight_blue" },
+        { text: "Cepat dan tegas ambil keputusan", color: "flash_red" }
+      ]
+    },
+    {
+      question: "Teman-teman biasanya bilang kamu itu...",
+      answers: [
+        { text: "Orang yang stabil dan bisa dipercaya", color: "ivory_brown" },
+        { text: "Selalu bawa energi positif", color: "enchanted_pink" },
+        { text: "Tenang dan bijak", color: "twilight_blue" },
+        { text: "Fleksibel dan mudah beradaptasi", color: "ash_grey" }
+      ]
+    },
+    {
+      question: "Apa yang paling kamu hargai dalam hidup?",
+      answers: [
+        { text: "Keberanian dan semangat hidup", color: "flash_red" },
+        { text: "Kedamaian dan ketenangan", color: "twilight_blue" },
+        { text: "Kreativitas dan kehangatan", color: "enchanted_pink" },
+        { text: "Harmoni sama alam", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Pas nulis sesuatu yang penting, kamu pengen terlihat...",
+      answers: [
+        { text: "Klasik dan hangat", color: "ivory_brown" },
+        { text: "Misterius dan kuat", color: "kuro_black" },
+        { text: "Netral dan fleksibel", color: "ash_grey" },
+        { text: "Berani dan penuh energi", color: "flash_red" }
+      ]
+    },
+    {
+      question: "Menurut kamu, warna apa yang bikin percaya diri?",
+      answers: [
+        { text: "Biru yang tenang", color: "twilight_blue" },
+        { text: "Merah yang berani", color: "flash_red" },
+        { text: "Hijau yang menyejukkan", color: "radiant_green" },
+        { text: "Kuning cerah dan ceria", color: "onyx_yellow" }
+      ]
+    }
+  ];
+
+  function createQuiz() {
+    const form = document.getElementById('quizForm');
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = `${i+1}. ${q.question}`;
+      div.appendChild(questionText);
+
+      q.answers.forEach((ans, idx) => {
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'question' + i;
+        input.id = `q${i}a${idx}`;
+        input.value = ans.color;
+        input.required = true;
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = ans.text;
+
+        div.appendChild(input);
+        div.appendChild(label);
+      });
+
+      form.appendChild(div);
+    });
+  }
+
+  function calculateResult(formData) {
+    const tally = {};
+    Object.keys(colors).forEach(c => (tally[c] = 0));
+    for(let pair of formData.entries()) {
+      const color = pair[1];
+      if(tally[color] !== undefined) tally[color]++;
+    }
+    let maxColor = null;
+    let maxCount = -1;
+    Object.entries(tally).forEach(([key, val]) => {
+      if(val > maxCount) {
+        maxColor = key;
+        maxCount = val;
+      }
+    });
+    return maxColor;
+  }
+
+  // Get claim count from localStorage or 0 if none
+  function getClaimCount() {
+    return parseInt(localStorage.getItem(REWARD_STORAGE_KEY) || "0", 10);
+  }
+  // Increase claim count by 1
+  function incrementClaimCount() {
+    let count = getClaimCount();
+    count++;
+    localStorage.setItem(REWARD_STORAGE_KEY, count.toString());
+    return count;
+  }
+
+  function showResult(colorKey) {
+    const result = document.getElementById('result');
+    const c = colors[colorKey];
+    // Create reward button and code container
+    const claimCount = getClaimCount();
+    const canClaim = claimCount < REWARD_MAX_CLAIM;
+    const rewardBtn = canClaim ? `
+      <button id="rewardBtn" type="button" aria-label="Dapatkan kode reward diskon">Dapatkan Reward!</button>
+      <div id="rewardCodeContainer" style="display:none;"></div>
+    ` : `
+      <div id="rewardLimitMsg">Maaf, kamu sudah mencapai batas klaim reward (maksimal ${REWARD_MAX_CLAIM} kali).</div>
+    `;
+
+    result.innerHTML = `
+      <h2>Warna Kepribadianmu: ${c.name}</h2>
+      <div class="color-swatch" style="background-color:${c.colorCode};"></div>
+      <p><strong>Deskripsi Kepribadian:</strong> ${c.personality}</p>
+      <p><strong>${c.recommendation}</strong></p>
+      <a href="${c.marketplace}" id="buyBtn" target="_blank" rel="noopener noreferrer" aria-label="Beli produk ${c.name} di marketplace">Beli Produk</a>
+      ${rewardBtn}
+      <p>Terima kasih sudah mengikuti tes!<br>Tunjukkan kepribadianmu dengan Fortekai Pen pilihanmu.</p>
+    `;
+    result.style.display = 'block';
+    result.focus();
+
+    if(canClaim) {
+      const rewardButton = document.getElementById('rewardBtn');
+      const rewardCodeContainer = document.getElementById('rewardCodeContainer');
+      rewardButton.addEventListener('click', () => {
+        const claimCountNow = incrementClaimCount();
+        rewardCodeContainer.style.display = 'block';
+        rewardCodeContainer.textContent = "Kode Voucher Kamu: " + REWARD_CODE;
+        if(claimCountNow >= REWARD_MAX_CLAIM) {
+          rewardButton.disabled = true;
+          rewardButton.textContent = "Batas Klaim Tercapai";
+          rewardButton.style.cursor = "not-allowed";
+          const limitMsg = document.createElement('div');
+          limitMsg.id = "rewardLimitMsg";
+          limitMsg.textContent = `Maaf, kamu sudah mencapai batas klaim reward (maksimal ${REWARD_MAX_CLAIM} kali).`;
+          rewardButton.insertAdjacentElement('afterend', limitMsg);
+        } else {
+          // Optionally show how many claims left
+          const left = REWARD_MAX_CLAIM - claimCountNow;
+          rewardCodeContainer.textContent += ` (Sisa klaim: ${left})`;
+        }
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    createQuiz();
+
+    const form = document.getElementById('quizForm');
+    const btn = document.getElementById('submitBtn');
+
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      if(btn.textContent === 'Lihat Hasil') {
+        if(form.checkValidity()) {
+          const formData = new FormData(form);
+          const resultColor = calculateResult(formData);
+          showResult(resultColor);
+          btn.textContent = 'Ulang Tes';
+        } else {
+          form.reportValidity();
+        }
+      } else {
+        location.reload();
+      }
+    });
+  });
+</script>
+</body>
+</html>
